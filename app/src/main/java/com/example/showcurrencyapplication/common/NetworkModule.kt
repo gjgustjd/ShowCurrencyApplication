@@ -1,6 +1,7 @@
 package com.example.showcurrencyapplication.common
 
 import com.example.showcurrencyapplication.model.CurrencyAPI
+import com.example.showcurrencyapplication.model.MainRepository.Companion.BASE_URL
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -10,7 +11,6 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule {
-    private val BASE_URL = "https://currencylayer.com/"
 
     @Provides
     @Singleton
