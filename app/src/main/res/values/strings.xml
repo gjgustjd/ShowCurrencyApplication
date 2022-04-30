@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ShowCurrencyApplication</string>
+    <string name="all_amount_format">%,2.2f</string>
 </resources>
