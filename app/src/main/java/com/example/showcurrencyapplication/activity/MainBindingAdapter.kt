@@ -1,9 +1,12 @@
 package com.example.showcurrencyapplication.activity
 
+import android.graphics.Color
 import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
 
@@ -28,10 +31,33 @@ object MainBindingAdapter {
 
                 override fun afterTextChanged(s: Editable?) {
                     val text = s.toString()
-                    viewModel.sourceMoney.value = if (text.isBlank()) 0 else text.toInt()
+                    viewModel.sourceMoney.value =
+                        if (text.isBlank()) {
+                            Toast.makeText(
+                                editText.context,
+                                "0 이상의 금액을 입력해주십시오.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            0
+                        } else
+                            text.toInt()
                 }
 
             })
         }
+    }
+
+    @BindingAdapter("bindAmount", "bindCurrency","bindCurrentRate")
+    @JvmStatic
+    fun bindAmount(textView: TextView, amount: Double, currency: String,rate:Double) {
+        textView.text =
+            if (amount > 10000 || amount == 0.0) {
+                textView.setTextColor(Color.RED)
+                "송금액이 바르지 않습니다."
+            } else {
+                textView.setTextColor(Color.BLACK)
+                "수취금액은 " + String.format("%,2.2f ", amount*rate) + currency + "입니다"
+            }
+
     }
 }

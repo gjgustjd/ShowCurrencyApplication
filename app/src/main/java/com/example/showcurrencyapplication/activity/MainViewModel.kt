@@ -9,9 +9,6 @@ import com.example.showcurrencyapplication.model.MainRepository
 import com.example.showcurrencyapplication.model.dto.currency.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -23,7 +20,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
     val sendState by lazy { US }
     val receiveState by lazy { MutableStateFlow<Currency>(Korean) }
-    val currentCurrency by lazy { MutableStateFlow(0.0) }
+    val currentRate by lazy { MutableStateFlow(0.0) }
     val requested_at by lazy { MutableLiveData("") }
     val sourceMoney by lazy { MutableStateFlow(0) }
 
@@ -37,7 +34,7 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
             val response = repository.getCurrency(requestCurrency)
             if (response.isSuccessful) {
                 val responseDto = response.body()
-                currentCurrency.value = when (receiveState.value) {
+                currentRate.value = when (receiveState.value) {
                     is Korean ->
                         responseDto!!.quotes.USDKRW
                     is Japan ->
