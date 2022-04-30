@@ -71,28 +71,6 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_main_label_send_state" />
 
         <TextView
-            android:id="@+id/txt_main_receive_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@{viewModel.receiveState.nation}"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_main_label_receive_state"
-            app:layout_constraintStart_toEndOf="@+id/txt_main_label_receive_state"
-            app:layout_constraintTop_toBottomOf="@+id/txt_main_label_send_state" />
-
-        <TextView
-            android:id="@+id/txt_main_receive_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@{'('+viewModel.receiveState.currency+')'}"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_main_label_receive_state"
-            app:layout_constraintStart_toEndOf="@+id/txt_main_receive_state"
-            app:layout_constraintTop_toBottomOf="@+id/txt_main_label_send_state" />
-
-        <TextView
             android:id="@+id/txt_main_label_exchange_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -204,5 +182,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_main_money_amount" />
+
+        <Spinner
+            android:id="@+id/spinner_main_currencies"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@android:color/transparent"
+            bindViewModel="@{viewModel}"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_main_label_receive_state"
+            app:layout_constraintStart_toEndOf="@+id/txt_main_label_receive_state"
+            app:layout_constraintTop_toTopOf="@+id/txt_main_label_receive_state" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</layout><!--    android:text='@{(viewModel.currentCurrency*viewModel.sourceMoney)>10000?"올바른 금액을 입력해 주십시오":("수취금액은 "+String.format(@string/all_amount_format,viewModel.currentCurrency*viewModel.sourceMoney)+" "+viewModel.receiveState.currency+" 입니다")}'-->
+</layout>

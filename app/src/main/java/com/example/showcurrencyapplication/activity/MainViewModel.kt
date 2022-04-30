@@ -10,6 +10,7 @@ import com.example.showcurrencyapplication.model.dto.currency.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -21,28 +22,35 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
     val sendState by lazy { US }
     val receiveState by lazy { MutableStateFlow<Currency>(Korean) }
     val currentRate by lazy { MutableStateFlow(0.0) }
-    val requested_at by lazy { MutableLiveData("") }
+    val requested_at by lazy { MutableStateFlow("") }
     val sourceMoney by lazy { MutableStateFlow(0) }
 
     fun getCurrencyData(requestCurrency: String) {
         val currentTimeString =
             ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:MM")).toString()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString()
 
         requested_at.value = currentTimeString
         viewModelScope.launch {
-            val response = repository.getCurrency(requestCurrency)
+            val response = withContext(viewModelScope.coroutineContext) {
+                repository.getCurrency(requestCurrency)
+            }
             if (response.isSuccessful) {
                 val responseDto = response.body()
-                currentRate.value = when (receiveState.value) {
-                    is Korean ->
-                        responseDto!!.quotes.USDKRW
-                    is Japan ->
-                        responseDto!!.quotes.USDJPY
-                    is Philippine ->
-                        responseDto!!.quotes.USDPHP
-                    is US ->
-                        1.0
+                try {
+                    currentRate.value = when (receiveState.value) {
+                        is Korean ->
+                            responseDto!!.quotes.USDKRW
+                        is Japan ->
+                            responseDto!!.quotes.USDJPY
+                        is Philippine ->
+                            responseDto!!.quotes.USDPHP
+                        is US ->
+                            1.0
+                    }
+                }catch (e:Exception)
+                {
+                    e.printStackTrace()
                 }
             }
         }
