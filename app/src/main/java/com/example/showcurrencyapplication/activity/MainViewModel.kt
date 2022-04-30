@@ -26,25 +26,18 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
     val currentCurrency by lazy { MutableStateFlow(0.0) }
     val requested_at by lazy { MutableLiveData("") }
     val sourceMoney by lazy { MutableStateFlow(0) }
-    val amount = flow {
-        emit((currentCurrency.value * sourceMoney.value).toString())
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = (currentCurrency.value * sourceMoney.value).toString()
-    )
 
     fun getCurrencyData(requestCurrency: String) {
         val currentTimeString =
             ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:MM")).toString()
 
         requested_at.value = currentTimeString
         viewModelScope.launch {
             val response = repository.getCurrency(requestCurrency)
             if (response.isSuccessful) {
                 val responseDto = response.body()
-                currentCurrency.value = when (receiveState.value!!) {
+                currentCurrency.value = when (receiveState.value) {
                     is Korean ->
                         responseDto!!.quotes.USDKRW
                     is Japan ->
