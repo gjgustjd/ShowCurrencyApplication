@@ -1,8 +1,26 @@
 package com.example.showcurrencyapplication.model.dto.currency
 
-enum class Currency(val nation: String, val currency: String) {
-    Korean("한국", "KRW"),
-    US("미국", "USD"),
-    Japan("일본", "JPY"),
-    Philippine("필리핀", "PHP")
+sealed class Currency {
+    abstract fun getNation(): String
+    abstract fun getCurrency(): String
+}
+
+object Korean : Currency() {
+    override fun getNation() = "한국"
+    override fun getCurrency() = "KRW"
+}
+
+object US : Currency() {
+    override fun getNation() = "미국"
+    override fun getCurrency() = "USD"
+}
+
+object Japan : Currency() {
+    override fun getNation() = "일본"
+    override fun getCurrency() = "JPY"
+}
+
+object Philippine : Currency() {
+    override fun getNation() = "필리핀"
+    override fun getCurrency() = "PHP"
 }
