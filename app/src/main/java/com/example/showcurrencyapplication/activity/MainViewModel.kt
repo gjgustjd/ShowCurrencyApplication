@@ -4,12 +4,10 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.showcurrencyapplication.model.MainRepository
 import com.example.showcurrencyapplication.model.dto.currency.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.ZoneId
@@ -25,6 +23,10 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
     val currentRate by lazy { MutableLiveData(0.0) }
     val requested_at by lazy { MutableLiveData("") }
     val sourceMoney by lazy { MutableLiveData(0) }
+
+    init{
+       getCurrencyData(Korean.getCurrency())
+    }
 
     fun getCurrencyData(requestCurrency: String) {
         requested_at.value = getRequestAtString()
