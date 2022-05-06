@@ -99,7 +99,7 @@ object MainBindingAdapter {
                                 Philippine
                             else -> Korean
                         }
-                    viewModel.getCurrencyData(viewModel.receiveState.value.getCurrency())
+                    viewModel.getCurrencyData(viewModel.receiveState.value!!.getCurrency())
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {

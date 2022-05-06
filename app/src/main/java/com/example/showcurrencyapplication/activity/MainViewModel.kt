@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.showcurrencyapplication.model.MainRepository
 import com.example.showcurrencyapplication.model.dto.currency.*
@@ -20,17 +21,13 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.O)
 class MainViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
     val sendState by lazy { US }
-    val receiveState by lazy { MutableStateFlow<Currency>(Korean) }
-    val currentRate by lazy { MutableStateFlow(0.0) }
-    val requested_at by lazy { MutableStateFlow("") }
-    val sourceMoney by lazy { MutableStateFlow(0) }
+    val receiveState by lazy { MutableLiveData<Currency>(Korean) }
+    val currentRate by lazy { MutableLiveData(0.0) }
+    val requested_at by lazy { MutableLiveData("") }
+    val sourceMoney by lazy { MutableLiveData(0) }
 
     fun getCurrencyData(requestCurrency: String) {
-        val currentTimeString =
-            ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString()
-
-        requested_at.value = currentTimeString
+        requested_at.value = getRequestAtString()
         viewModelScope.launch {
             val response = withContext(viewModelScope.coroutineContext) {
                 repository.getCurrency(requestCurrency)
@@ -45,14 +42,18 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
                             responseDto!!.quotes.USDJPY
                         is Philippine ->
                             responseDto!!.quotes.USDPHP
-                        is US ->
+                        else -> {
                             1.0
+                        }
                     }
-                }catch (e:Exception)
-                {
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         }
     }
+
+    private fun getRequestAtString() =
+        ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString()
 }
