@@ -8,7 +8,6 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import com.example.showcurrencyapplication.R
 import com.example.showcurrencyapplication.databinding.ActivityMainBinding
-import com.example.showcurrencyapplication.model.dto.currency.Korean
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

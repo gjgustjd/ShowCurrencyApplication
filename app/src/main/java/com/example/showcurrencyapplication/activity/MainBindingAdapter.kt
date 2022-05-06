@@ -23,22 +23,8 @@ object MainBindingAdapter {
         viewModel?.let {
             if (value) {
                 editText.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                    }
-
+                    override fun beforeTextChanged( s: CharSequence?, start: Int, count: Int, after: Int ) {}
+                    override fun onTextChanged( s: CharSequence?, start: Int, before: Int, count: Int ) {}
                     override fun afterTextChanged(s: Editable?) {
                         val text = s.toString()
                         viewModel.sourceMoney.value =
@@ -52,7 +38,6 @@ object MainBindingAdapter {
                             } else
                                 text.toInt()
                     }
-
                 })
             }
         }
@@ -83,6 +68,7 @@ object MainBindingAdapter {
                 spinner.resources.getStringArray(R.array.spinner_currencyItems)
             )
             spinner.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
@@ -101,10 +87,6 @@ object MainBindingAdapter {
                         }
                     viewModel.getCurrencyData(viewModel.receiveState.value!!.getCurrency())
                 }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
-
             }
         }
     }
