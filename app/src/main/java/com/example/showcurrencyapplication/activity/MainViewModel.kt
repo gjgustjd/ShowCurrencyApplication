@@ -25,18 +25,19 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
     val sourceMoney by lazy { MutableLiveData(0) }
 
     init{
-       getCurrencyData(Korean.getCurrency())
+       getCurrencyData(Korean)
     }
 
-    fun getCurrencyData(requestCurrency: String) {
+    fun getCurrencyData(requestCurrency: Currency) {
         requested_at.value = getRequestAtString()
         viewModelScope.launch {
             val response = withContext(viewModelScope.coroutineContext) {
-                repository.getCurrency(requestCurrency)
+                repository.getCurrency(requestCurrency.getCurrency())
             }
             if (response.isSuccessful) {
                 val responseDto = response.body()
                 try {
+                    receiveState.value = requestCurrency
                     currentRate.value = when (receiveState.value) {
                         is Korean ->
                             responseDto!!.quotes.USDKRW

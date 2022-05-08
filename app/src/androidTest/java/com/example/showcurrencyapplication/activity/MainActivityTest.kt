@@ -1,7 +1,5 @@
 package com.example.showcurrencyapplication.activity
 
-import android.graphics.Color
-import android.graphics.Color.RED
 import android.view.View
 import android.widget.TextView
 import androidx.test.espresso.Espresso.onData
@@ -17,8 +15,6 @@ import androidx.test.filters.LargeTest
 import com.example.showcurrencyapplication.R
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.Matcher
-import android.graphics.Color.*
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -103,7 +99,7 @@ class MainActivityTest {
             }
 
             override fun perform(uiController: UiController?, view: View) {
-                val tv = view as TextView //Save, because of check in getConstraints()
+                val tv = view as TextView
                 stringHolder[0] = tv.text.toString()
             }
         })
@@ -122,7 +118,7 @@ class MainActivityTest {
             }
 
             override fun perform(uiController: UiController?, view: View) {
-                val tv = view as TextView //Save, because of check in getConstraints()
+                val tv = view as TextView
                 stringHolder[0] = tv.tag.toString()
             }
         })
