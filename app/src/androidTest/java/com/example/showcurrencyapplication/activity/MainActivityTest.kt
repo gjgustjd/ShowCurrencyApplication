@@ -31,10 +31,13 @@ class MainActivityTest {
 
     @Test
     fun showAlertMessageTest() {
-        onView(withId(R.id.edt_main_money_amount))
-            .perform(typeText("0"), closeSoftKeyboard())
+        val edtMoneyAmount = onView(withId(R.id.edt_main_money_amount))
+        edtMoneyAmount.perform(clearText(), typeText("0"), closeSoftKeyboard())
 
         val textView = onView(withId(R.id.txt_main_exchanged_money))
+        textView.check(matches(withText("송금액이 바르지 않습니다.")))
+
+        edtMoneyAmount.perform(clearText(), typeText("10001"), closeSoftKeyboard())
         textView.check(matches(withText("송금액이 바르지 않습니다.")))
     }
 
