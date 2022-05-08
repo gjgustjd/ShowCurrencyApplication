@@ -85,6 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:tag="@{viewModel.currentRate}"
             android:text="@{String.format(@string/all_amount_format,viewModel.currentRate)}"
             android:textSize="16dp"
             app:layout_constraintStart_toEndOf="@+id/txt_main_label_exchange_rate"
@@ -94,6 +95,7 @@
             android:id="@+id/txt_main_ex_rate_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:tag="@{viewModel.receiveState.currency}"
             android:text="@{' '+viewModel.receiveState.currency+' '}"
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/txt_main_label_exchange_rate"
@@ -104,6 +106,7 @@
             android:id="@+id/txt_main_ex_rate_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:tag="@{viewModel.sendState.currency}"
             android:text='@{"/ "+viewModel.sendState.currency+" "}'
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/txt_main_label_exchange_rate"
@@ -146,6 +149,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:tag="@{viewModel.sendState.currency}"
             android:text="@{' '+viewModel.sendState.currency}"
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/edt_main_money_amount"
@@ -185,10 +189,10 @@
 
         <Spinner
             android:id="@+id/spinner_main_currencies"
+            bindViewModel="@{viewModel}"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:background="@android:color/transparent"
-            bindViewModel="@{viewModel}"
             app:layout_constraintBottom_toBottomOf="@+id/txt_main_label_receive_state"
             app:layout_constraintStart_toEndOf="@+id/txt_main_label_receive_state"
             app:layout_constraintTop_toTopOf="@+id/txt_main_label_receive_state" />
