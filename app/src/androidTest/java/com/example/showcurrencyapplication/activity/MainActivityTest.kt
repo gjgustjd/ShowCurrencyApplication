@@ -51,6 +51,29 @@ class MainActivityTest {
             .check(matches(withText(String.format("수취금액은 %,2.2f KRW입니다", exchangedMoneyText))))
     }
 
+    @Test
+    fun selectAllCurrencyTest() {
+        selectCurrencyTest("한국 (KRW)", "수취금액은 %,2.2f KRW입니다")
+        selectCurrencyTest("일본 (JPY)", "수취금액은 %,2.2f JPY입니다")
+        selectCurrencyTest("필리핀 (PHP)", "수취금액은 %,2.2f PHP입니다")
+    }
+
+    private fun selectCurrencyTest(spinnerText: String, resultText: String) {
+        val spinnerCurrencies = onView(withId(R.id.spinner_main_currencies))
+        spinnerCurrencies.perform(click())
+        onData(allOf(`is`(instanceOf(String::class.java)), `is`(spinnerText))).perform(click())
+
+        val edtMoney = onView(withId(R.id.edt_main_money_amount))
+        edtMoney.perform(clearText(), typeText("10"), closeSoftKeyboard())
+
+        val exchangeRate = withId(R.id.txt_main_exchange_rate).getTag().toString().replace(",", "")
+        val sendAmount = withId(R.id.edt_main_money_amount).getText().toString()
+        val exchangedMoneyText = (exchangeRate.toDouble() * sendAmount.toDouble())
+
+        val targetText = String.format(resultText, exchangedMoneyText)
+        val txtExchanged = onView(withId(R.id.txt_main_exchanged_money))
+        txtExchanged.check(matches(withText(targetText)))
+    }
 
 
     private fun Matcher<View?>.getText(): String? {
