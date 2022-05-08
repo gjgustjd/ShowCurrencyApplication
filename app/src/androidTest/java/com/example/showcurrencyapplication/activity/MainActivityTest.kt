@@ -1,5 +1,7 @@
 package com.example.showcurrencyapplication.activity
 
+import android.graphics.Color
+import android.graphics.Color.RED
 import android.view.View
 import android.widget.TextView
 import androidx.test.espresso.Espresso.onData
@@ -15,6 +17,7 @@ import androidx.test.filters.LargeTest
 import com.example.showcurrencyapplication.R
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.Matcher
+import android.graphics.Color.*
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -36,9 +39,11 @@ class MainActivityTest {
 
         val textView = onView(withId(R.id.txt_main_exchanged_money))
         textView.check(matches(withText("송금액이 바르지 않습니다.")))
+        textView.check(matches(hasTextColor(R.color.red)))
 
         edtMoneyAmount.perform(clearText(), typeText("10001"), closeSoftKeyboard())
         textView.check(matches(withText("송금액이 바르지 않습니다.")))
+        textView.check(matches(hasTextColor(R.color.red)))
     }
 
     @Test
@@ -50,8 +55,10 @@ class MainActivityTest {
         val sendAmount = withId(R.id.edt_main_money_amount).getText().toString()
         val exchangedMoneyText = (exchangeRate.toDouble() * sendAmount.toDouble())
 
-        onView(withId(R.id.txt_main_exchanged_money))
-            .check(matches(withText(String.format("수취금액은 %,2.2f KRW입니다", exchangedMoneyText))))
+        val txtExchangedMoney = onView(withId(R.id.txt_main_exchanged_money))
+            txtExchangedMoney.check(matches(withText(String.format("수취금액은 %,2.2f KRW입니다", exchangedMoneyText))))
+        txtExchangedMoney.check(matches(hasTextColor(R.color.black)))
+
     }
 
     @Test
