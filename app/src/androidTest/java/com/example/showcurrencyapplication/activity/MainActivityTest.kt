@@ -2,7 +2,6 @@ package com.example.showcurrencyapplication.activity
 
 import android.view.View
 import android.widget.TextView
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -13,7 +12,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.showcurrencyapplication.R
-import org.hamcrest.CoreMatchers.*
 import org.hamcrest.Matcher
 import org.junit.Rule
 import org.junit.Test
@@ -33,12 +31,13 @@ class MainActivityTest {
         val edtMoneyAmount = onView(withId(R.id.edt_main_money_amount))
         edtMoneyAmount.perform(clearText(), typeText("0"), closeSoftKeyboard())
 
+        val expectedText = "송금액이 바르지 않습니다."
         val textView = onView(withId(R.id.txt_main_exchanged_money))
-        textView.check(matches(withText("송금액이 바르지 않습니다.")))
+        textView.check(matches(withText(expectedText)))
         textView.check(matches(hasTextColor(R.color.red)))
 
         edtMoneyAmount.perform(clearText(), typeText("10001"), closeSoftKeyboard())
-        textView.check(matches(withText("송금액이 바르지 않습니다.")))
+        textView.check(matches(withText(expectedText)))
         textView.check(matches(hasTextColor(R.color.red)))
     }
 
@@ -52,40 +51,19 @@ class MainActivityTest {
         val exchangedMoneyText = (exchangeRate.toDouble() * sendAmount.toDouble())
 
         val txtExchangedMoney = onView(withId(R.id.txt_main_exchanged_money))
-            txtExchangedMoney.check(matches(withText(String.format("수취금액은 %,2.2f KRW입니다", exchangedMoneyText))))
+        txtExchangedMoney.check(
+            matches(
+                withText(
+                    String.format(
+                        "수취금액은 %,2.2f KRW입니다",
+                        exchangedMoneyText
+                    )
+                )
+            )
+        )
         txtExchangedMoney.check(matches(hasTextColor(R.color.black)))
 
     }
-
-    @Test
-    fun selectAllCurrencyTest() {
-        selectCurrencyTest("한국 (KRW)", "수취금액은 %,2.2f KRW입니다", "KRW")
-        selectCurrencyTest("일본 (JPY)", "수취금액은 %,2.2f JPY입니다", "JPY")
-        selectCurrencyTest("필리핀 (PHP)", "수취금액은 %,2.2f PHP입니다", "PHP")
-    }
-
-    private fun selectCurrencyTest(spinnerText: String, resultText: String, currency: String) {
-        val spinnerCurrencies = onView(withId(R.id.spinner_main_currencies))
-        spinnerCurrencies.perform(click())
-        onData(allOf(`is`(instanceOf(String::class.java)), `is`(spinnerText))).perform(click())
-
-        val txtExchangeToCurrency = onView(withId(R.id.txt_main_ex_rate_to))
-        txtExchangeToCurrency.check(
-            matches(withText(" $currency "))
-        )
-
-        val edtMoney = onView(withId(R.id.edt_main_money_amount))
-        edtMoney.perform(clearText(), typeText("10"), closeSoftKeyboard())
-
-        val exchangeRate = withId(R.id.txt_main_exchange_rate).getTag().toString().replace(",", "")
-        val sendAmount = withId(R.id.edt_main_money_amount).getText().toString()
-        val exchangedMoneyText = (exchangeRate.toDouble() * sendAmount.toDouble())
-
-        val targetText = String.format(resultText, exchangedMoneyText)
-        val txtExchanged = onView(withId(R.id.txt_main_exchanged_money))
-        txtExchanged.check(matches(withText(targetText)))
-    }
-
 
     private fun Matcher<View?>.getText(): String? {
         val stringHolder = arrayOf<String?>(null)
