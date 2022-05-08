@@ -53,15 +53,20 @@ class MainActivityTest {
 
     @Test
     fun selectAllCurrencyTest() {
-        selectCurrencyTest("한국 (KRW)", "수취금액은 %,2.2f KRW입니다")
-        selectCurrencyTest("일본 (JPY)", "수취금액은 %,2.2f JPY입니다")
-        selectCurrencyTest("필리핀 (PHP)", "수취금액은 %,2.2f PHP입니다")
+        selectCurrencyTest("한국 (KRW)", "수취금액은 %,2.2f KRW입니다", "KRW")
+        selectCurrencyTest("일본 (JPY)", "수취금액은 %,2.2f JPY입니다", "JPY")
+        selectCurrencyTest("필리핀 (PHP)", "수취금액은 %,2.2f PHP입니다", "PHP")
     }
 
-    private fun selectCurrencyTest(spinnerText: String, resultText: String) {
+    private fun selectCurrencyTest(spinnerText: String, resultText: String, currency: String) {
         val spinnerCurrencies = onView(withId(R.id.spinner_main_currencies))
         spinnerCurrencies.perform(click())
         onData(allOf(`is`(instanceOf(String::class.java)), `is`(spinnerText))).perform(click())
+
+        val txtExchangeToCurrency = onView(withId(R.id.txt_main_ex_rate_to))
+        txtExchangeToCurrency.check(
+            matches(withText(" $currency "))
+        )
 
         val edtMoney = onView(withId(R.id.edt_main_money_amount))
         edtMoney.perform(clearText(), typeText("10"), closeSoftKeyboard())
