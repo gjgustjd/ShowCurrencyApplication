@@ -176,9 +176,7 @@
 
         <TextView
             android:id="@+id/txt_main_exchanged_money"
-            bindAmount="@{viewModel.sourceMoney}"
-            bindCurrency="@{viewModel.receiveState.currency}"
-            bindCurrentRate="@{viewModel.currentRate}"
+            android:text="@{viewModel.exchangedMoney}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"

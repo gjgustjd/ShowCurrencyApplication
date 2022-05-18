@@ -8,7 +8,7 @@ import javax.inject.Singleton
 class MainRepository @Inject constructor(private val currencyAPI: CurrencyAPI) {
     companion object {
         val BASE_URL = "http://apilayer.net/"
-        val api_key = "dfc757c9a7fcb84de868426541000edf"
+        val api_key = "ee50cd7cc73c9b7a7bb3d9617cfb6b9c"
     }
 
    suspend fun getCurrency(requestCurrency: String) =

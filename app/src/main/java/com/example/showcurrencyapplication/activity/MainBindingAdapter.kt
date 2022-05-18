@@ -20,40 +20,38 @@ object MainBindingAdapter {
     @BindingAdapter("bindRealtimeMoney", "bindViewModel")
     @JvmStatic
     fun bindRealtimeMoney(editText: EditText, value: Boolean, viewModel: MainViewModel) {
-        viewModel?.let {
-            if (value) {
-                editText.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
+        if (value) {
+            editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
 
-                    override fun onTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                    }
+                override fun onTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    before: Int,
+                    count: Int
+                ) {
+                }
 
-                    override fun afterTextChanged(s: Editable?) {
-                        val text = s.toString()
-                        viewModel.sourceMoney.value =
-                            if (text.isBlank()) {
-                                Toast.makeText(
-                                    editText.context,
-                                    "0 이상의 금액을 입력해주십시오.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                0
-                            } else
-                                text.toInt()
-                    }
-                })
-            }
+                override fun afterTextChanged(s: Editable?) {
+                    val text = s.toString()
+                    viewModel.sourceMoney.value =
+                        if (text.isBlank()) {
+                            Toast.makeText(
+                                editText.context,
+                                "0 이상의 금액을 입력해주십시오.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            0
+                        } else
+                            text.toInt()
+                }
+            })
         }
     }
 
@@ -75,32 +73,30 @@ object MainBindingAdapter {
     @JvmStatic
     @RequiresApi(Build.VERSION_CODES.O)
     fun bindSpinnerArray(spinner: Spinner, viewModel: MainViewModel) {
-        viewModel?.let {
-            spinner.adapter = ArrayAdapter(
-                spinner.context,
-                android.R.layout.simple_spinner_dropdown_item,
-                spinner.resources.getStringArray(R.array.spinner_currencyItems)
-            )
-            spinner.onItemSelectedListener = object : OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    val state =
-                        when (position) {
-                            0 ->
-                                Korean
-                            1 ->
-                                Japan
-                            2 ->
-                                Philippine
-                            else -> Korean
-                        }
-                    viewModel.getCurrencyData(state)
-                }
+        spinner.adapter = ArrayAdapter(
+            spinner.context,
+            android.R.layout.simple_spinner_dropdown_item,
+            spinner.resources.getStringArray(R.array.spinner_currencyItems)
+        )
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val state =
+                    when (position) {
+                        0 ->
+                            Korean
+                        1 ->
+                            Japan
+                        2 ->
+                            Philippine
+                        else -> Korean
+                    }
+                viewModel.getCurrencyData(state)
             }
         }
     }
